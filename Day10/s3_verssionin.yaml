@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+
+
+  tasks:
+    - name: List all the S3 buckets
+      amazon.aws.s3_bucket_info:
+      register: result
+
+    - name: Display the result of S3
+      ansible.builtin.debug:
+        var: result
+
+    - name: Enable Versioning
+      amazon.aws.s3_bucket:
+        name: "{{ item.name }}"
+        versioning: yes
+      loop: "{{ result.buckets }}"
